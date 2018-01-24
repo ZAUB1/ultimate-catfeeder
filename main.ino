@@ -23,14 +23,15 @@ int maxdistribparjour = 0;
 #define btnmenu2 //Christian needed
 #define btnretour //Christian needed
 
-int fakepoid = 0;
+int fakepoid;
+int croquettesnow;
 #define croquettesdepart 300
 
-int afficheurman = 0;
+int afficheurman;
 
-int heureauto = 0;
-int heureauto1 = 0;
-int heureauto2 = 0;
+int heureauto;
+int heureauto1;
+int heureauto2;
 int heure = hour();
 
 Servo turnaround;
@@ -38,7 +39,6 @@ LiquidCrystal lcd(portafficheurRS, portafficheur2, portafficheur3, portafficheur
 
 void setup() { //Init
 	pinMode(bp, INPUT);
-	pinMode(servo, OUTPUT);
 
 	lcd.begin(16, 2);
 
@@ -55,7 +55,7 @@ void setup() { //Init
 	lcd.clear();
 	menu();
 
-    int fakepoid = 300;
+    fakepoid = 300;
 }
 
 void loop() { //Boucle principale
@@ -97,7 +97,7 @@ void loop() { //Boucle principale
         Serial.println(fakepoid);
 	}
 
-    int croquettesnow = fakepoid;
+    croquettesnow = fakepoid;
 }
 
 void manger() { //Fonction de distribution des croquettes
@@ -106,17 +106,17 @@ void manger() { //Fonction de distribution des croquettes
 }
 
 void configurator() {
-    if btnmenu1 == 1
+    if (btnmenu1 == 1)
     {
         lcd.clear();
         reglages();
     }
-    else if btnmenu2 == 1
+    else if (btnmenu2 == 1)
     {
         lcd.clear();
         poidcroquettes();
     }
-    else if btnretour == 1
+    else if (btnretour == 1)
     {
         lcd.clear();
         menu();
@@ -145,7 +145,7 @@ void addconfig() {
 }
 
 void heureauto() {
-	if heure == 7 or heure == 19
+	if (heure == 7 or heure == 19)
 	{
 		heureauto = 1;
 	}
@@ -221,12 +221,12 @@ void reglages() {
     lcd.setCursor(1, 11);
     lcd.print("2");
 
-    if btnmenu1 == 1
+    if (btnmenu1 == 1)
     {
         lcd.clear();
         rglheures();
     }
-    else if btnmenu2 == 1
+    else if (btnmenu2 == 1)
     {
         lcd.clear();
         display();
