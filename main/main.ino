@@ -12,7 +12,7 @@
 #define PIN_BHEURE 0
 
 // Parametres de l'ecran LCD
-#define I2C_ADDR 0x0
+#define LCD_ADDR 0x0
 #define LCD_COLS 16
 #define LCD_LIGS 2
 
@@ -21,6 +21,7 @@ int dose;
 
 // Rations distribuees dans la journee et nombre maximal de rations par jour
 int nbdistrib;
+int nbdemandes;
 int maxdistribparjour;
 
 // Si oui ou non la distribution automatique est activee et heures de la distribution automatique
@@ -34,7 +35,7 @@ int croquettesnow;
 int poidcroquettes;
 int decrementpoid;
 
-int afficheurman;
+int jouract;
 
 Servo servo;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_LIGS);
@@ -66,8 +67,6 @@ void setup()
     delay(2000);
     lcd.clear();
     menu();
-
-    fakepoid = croquettesdepart;
 }
 
 void loop()
@@ -77,10 +76,16 @@ void loop()
         jouract = day();
         nbdistrib = 0;
         nbdemandes = 0;
+
+        for(int i = 0; i < 24; i++)
+        {
+            distribdonnee[i] = 0;
+        }
     }
 
-    if(heureauto && distribauto[heure])
+    if(heureauto && distribauto[hour()] && !distribdonnee[hour()])
     {
+        distribdonnee[hour()] = 1;
         fakepoid -= dose;
 
         manger();
