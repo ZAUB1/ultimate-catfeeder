@@ -20,9 +20,9 @@ int maxdistribparjour = 0;
 #define btnreglage  42 // Entree chistian
 #define servo 42  //Sortie chistian
 
-#define btnmenu1 42//Christian needed
-#define btnmenu2 42 //Christian needed
-#define btnretour 42 //Christian needed
+#define portbtnmenu1 42 // Entree Christian
+#define portbtnmenu2 42 // Entree Christian
+#define portbtnretour 42 // Entree christian
 
 int fakepoid;
 int croquettesnow;
@@ -47,6 +47,11 @@ void setup() { //Init
   distribauto[19] = 1;
   
 	pinMode(bp, INPUT);
+	pinMode(portbtnmenu1, INPUT);
+	pinMode(portbtnmenu2, INPUT);
+	pinMode(portbtnretour, INPUT);
+
+	pinMode(servo, OUTPUT);
 
 	lcd.begin(16, 2);
 
@@ -67,6 +72,10 @@ void setup() { //Init
 }
 
 void loop() { //Boucle principale
+
+	int btnmenu1 = digitalRead(portbtnmenu1); //Christian needed
+	int btnmenu2 = digitalRead(portbtnmenu2); //Christian needed
+	int btnretour = digitalRead(portbtnretour); //Christian needed
   
 	btnconfig();
 
@@ -113,17 +122,17 @@ void manger() { //Fonction de distribution des croquettes
 }
 
 void configurator() {
-    if (btnmenu1 == 1)
+    if (btnmenu1 == HIGH)
     {
         lcd.clear();
         reglages();
     }
-    else if (btnmenu2 == 1)
+    else if (btnmenu2 == HIGH)
     {
         lcd.clear();
         croquettes();
     }
-    else if (btnretour == 1)
+    else if (btnretour == HIGH)
     {
         lcd.clear();
         menu();
