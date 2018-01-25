@@ -16,22 +16,25 @@
 #define LCD_COLS 16
 #define LCD_LIGS 2
 
-#define croquettesdepart 300
-
 // Quantite distribuee par ration
 int dose;
 
-// Rations distribuees et reclammees dans la journee et nombre maximal de rations par jour
+// Rations distribuees dans la journee et nombre maximal de rations par jour
 int nbdistrib;
-int nbdemandes;
 int maxdistribparjour;
 
 // Si oui ou non la distribution automatique est activee et heures de la distribution automatique
 int distribauto;
 int heureauto[24];
 
-// Simulation du poids restant
+// Je mets un commentaire mais je sais pas ce que c'est
 int fakepoid;
+int croquettesnow;
+#define croquettesdepart 300
+int poidcroquettes;
+int decrementpoid;
+
+int afficheurman;
 
 Servo servo;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_LIGS);
@@ -86,28 +89,35 @@ void loop()
         Serial.println("Var poids : ");
         Serial.println(fakepoid);
     }
-    else if(digitalRead(PIN_BCHAT) == HIGH && nbdistrib < maxdistribparjour)
+    else if(digitalRead(PIN_BCHAT) == HIGH)
     {
-        manger();
+        if(nbdistrib < maxdistribparjour)
+        {
+            manger();
 
-        Serial.println("NOURRIS-MOI");
+            Serial.println("NOURRIS-MOI");
 
-        distribparjour++;
-        fakepoid -= decrementpoid;
+            distribparjour++;
+            nbdemandes++;
+            fakepoid -= decrementpoid;
 
-        Serial.printt("Distributions : ");
-        Serial.println(nbdistrib);
-        Serial.print("Nombre de demandes : ");
-        Serial.println(nbdemandes);
-        Serial.print("Var poid : ");
-        Serial.println(fakepoid);
+            Serial.printt("Distributions : ");
+            Serial.println(nbdistrib);
+            Serial.print("Nombre de demandes : ");
+            Serial.println(nbdemandes);
+            Serial.print("Var poid : ");
+            Serial.println(fakepoid);
+        }
+        else
+        {
+            Serial.println("Attention gruge");
+            nbdemandes++;
+        }
     }
     else if(digitalRead(BHEURE) == HIGH)
     {
         settime();
     }
-
-    croquettesnow = fakepoid;
 }
 
 void manger() { //Fonction de distribution des croquettes
@@ -173,6 +183,8 @@ void display() { //Fonction de l'afficheur
     lcd.print("Maximum : ");
     lcd.setCursor(1, 11);
     lcd.print(maxdistribparjour);
+
+	btnconfig();
 
     delay(4500);
 
