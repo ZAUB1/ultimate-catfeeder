@@ -16,25 +16,22 @@
 #define LCD_COLS 16
 #define LCD_LIGS 2
 
+#define croquettesdepart 300
+
 // Quantite distribuee par ration
 int dose;
 
-// Rations distribuees dans la journee et nombre maximal de rations par jour
+// Rations distribuees et reclammees dans la journee et nombre maximal de rations par jour
 int nbdistrib;
+int nbdemandes;
 int maxdistribparjour;
 
 // Si oui ou non la distribution automatique est activee et heures de la distribution automatique
 int distribauto;
 int heureauto[24];
 
-// Je mets un commentaire mais je sais pas ce que c'est
+// Simulation du poids restant
 int fakepoid;
-int croquettesnow;
-#define croquettesdepart 300
-int poidcroquettes;
-int decrementpoid;
-
-int afficheurman;
 
 Servo servo;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_LIGS);
@@ -72,6 +69,7 @@ void setup()
 
 void loop() { //Boucle principale
 
+<<<<<<< HEAD
     int btnmenu1 = digitalRead(PIN_BMENU1); //Christian needed
     int btnmenu2 = digitalRead(PIN_BMENU2); //Christian needed
     int btnretour = digitalRead(PIN_BMENU3); //Christian needed
@@ -79,6 +77,11 @@ void loop() { //Boucle principale
   
     btnconfig();
     rsttime();
+=======
+    int btnmenu1 = digitalRead(portbtnmenu1); //Christian needed
+    int btnmenu2 = digitalRead(portbtnmenu2); //Christian needed
+    int btnretour = digitalRead(portbtnretour); //Christian needed
+>>>>>>> 4e04b5b5a71fc4440b70c8132d825ccd1143f85c
 
     int bpactiv = digitalRead(bp);
 
