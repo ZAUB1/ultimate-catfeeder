@@ -87,7 +87,7 @@ void loop() { //Boucle principale
 
 	if (heureauto == 1 && distribauto[heure])
 	{
-		int decrementpoid = random(45, 65);
+		decrementpoid = random(45, 65);
 
 		manger();
 
@@ -101,7 +101,7 @@ void loop() { //Boucle principale
 	}
 	else if (bpactiv == 1 && distribparjour <= maxdistribparjour)
 	{
-		int decrementpoid = random(45, 65);
+		decrementpoid = random(45, 65);
 
         manger();
 
@@ -284,19 +284,19 @@ void indistribcrt() {
 	lcd.print("LARGUAGE EN COUR");
 	lcd.setCursor(1, 5);
 	lcd.print(".");
-	delay(50);
+	delay(100);
 	lcd.setCursor(1, 6);
 	lcd.print(".");
-	delay(50);
+	delay(100);
 	lcd.setCursor(1, 7);
 	lcd.print(".");
-	delay(50);
+	delay(100);
 	lcd.setCursor(1, 8);
 	lcd.print(".");
-	delay(50);
+	delay(100);
 	lcd.setCursor(1, 9);
 	lcd.print(".");
-	delay(50);
+	delay(100);
 	lcd.setCursor(1, 10);
 	lcd.print(".");
 }
