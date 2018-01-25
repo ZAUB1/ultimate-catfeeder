@@ -64,62 +64,45 @@ void setup()
     lcd.clear();
     menu();
 
-    fakepoid = 300;
+    fakepoid = croquettesdepart;
 }
 
-void loop() { //Boucle principale
-
-<<<<<<< HEAD
-    int btnmenu1 = digitalRead(PIN_BMENU1); //Christian needed
-    int btnmenu2 = digitalRead(PIN_BMENU2); //Christian needed
-    int btnretour = digitalRead(PIN_BMENU3); //Christian needed
-    int BHEURE = digitalRead(PIN_BHEURE);
-  
-    btnconfig();
-    rsttime();
-=======
-    int btnmenu1 = digitalRead(portbtnmenu1); //Christian needed
-    int btnmenu2 = digitalRead(portbtnmenu2); //Christian needed
-    int btnretour = digitalRead(portbtnretour); //Christian needed
->>>>>>> 4e04b5b5a71fc4440b70c8132d825ccd1143f85c
-
-    int bpactiv = digitalRead(bp);
-
-    if (heureauto == 1 && distribauto[heure])
+void loop()
+{
+    if(jouract != day())
     {
-        decrementpoid = random(45, 65);
+        jouract = day();
+        nbdistrib = 0;
+        nbdemandes = 0;
+    }
+
+    if(heureauto && distribauto[heure])
+    {
+        fakepoid -= dose;
 
         manger();
 
         Serial.println("LA BOUFFE");
-
-        heureauto = 0;
-        fakepoid = fakepoid - decrementpoid;
-
-        Serial.println("Var poid : ");
+        Serial.println("Var poids : ");
         Serial.println(fakepoid);
     }
-    else if (bpactiv == 1 && distribparjour <= maxdistribparjour)
+    else if(digitalRead(PIN_BCHAT) == HIGH && nbdistrib < maxdistribparjour)
     {
-        decrementpoid = random(45, 65);
-
         manger();
 
-        Serial.println("Triggered distrib manuel");
+        Serial.println("NOURRIS-MOI");
 
         distribparjour++;
-        afficheurman++;
+        fakepoid -= decrementpoid;
 
-        fakepoid = fakepoid - decrementpoid;
-
-        Serial.println("Distribution par jour : ");
-        Serial.println(distribparjour);
-        Serial.println("Variable afficheur nbr de x manuel : ");
-        Serial.println(afficheurman);
-        Serial.println("Var poid : ");
+        Serial.printt("Distributions : ");
+        Serial.println(nbdistrib);
+        Serial.print("Nombre de demandes : ");
+        Serial.println(nbdemandes);
+        Serial.print("Var poid : ");
         Serial.println(fakepoid);
     }
-    else if (BHEURE == HIGH)
+    else if(digitalRead(BHEURE) == HIGH)
     {
         settime();
     }
