@@ -1,4 +1,4 @@
-#include <time.h> // Synchro tps avec l'ordi
+#include <Time.h> // Synchro tps avec l'ordi
 #include <LiquidCrystal.h> // Lib afficheur liquid
 #include <Servo.h> // Lib servo
 #include <Wire.h>
@@ -27,11 +27,15 @@ int maxdistribparjour = 0;
 int fakepoid;
 int croquettesnow;
 #define croquettesdepart 300
+int poidcroquettes;
 
 int afficheurman;
 
 int heureauto;
 int distribauto[24];
+
+int heureauto1;
+int heureauto2;
 
 int heure = hour(); // FIXEME
 
@@ -117,7 +121,7 @@ void configurator() {
     else if (btnmenu2 == 1)
     {
         lcd.clear();
-        poidcroquettes();
+        croquettes();
     }
     else if (btnretour == 1)
     {
@@ -127,7 +131,7 @@ void configurator() {
 }
 
 void btnconfig() {
-	btnplus = digitalRead(btnreglage);
+	int btnplus = digitalRead(btnmenu1);
 	
 	if (btnplus == HIGH)
 	{
@@ -136,7 +140,7 @@ void btnconfig() {
 }
 
 void addconfig() {
-	for (maxdistribparjour = 1, 5, maxdistribparjour = maxdistribparjour++)
+	for (maxdistribparjour = 1; maxdistribparjour <= 5; maxdistribparjour++)
 	{
 		Serial.println(maxdistribparjour);
 
@@ -207,25 +211,51 @@ void reglages() {
     lcd.setCursor(0, 0);
     lcd.print("Heures");
     lcd.setCursor(1, 3);
-    lcd.print("1")
+    lcd.print("1");
     lcd.setCursor(0, 8);
     lcd.print("Manuel");
     lcd.setCursor(1, 11);
     lcd.print("2");
 
-    if (btnmenu1 == 1)
+    if (btnmenu1 == HIGH)
     {
         lcd.clear();
         rglheures();
     }
-    else if (btnmenu2 == 1)
+    else if (btnmenu2 == HIGH)
     {
         lcd.clear();
         display();
     }
-    else if btnretour == 1
+    else if (btnretour == HIGH)
     {
         lcd.clear();
         menu();
     }
+}
+
+void rglheures() {
+	lcd.setCursor(0, 0);
+
+	lcd.print("1 : ");
+	lcd.setCursor(0, 5);
+	lcd.print(heureauto1);
+	lcd.setCursor(1, 0);
+	lcd.print("2 : ");
+	lcd.setCursor(1, 5);
+	lcd.print(heureauto2);
+
+	if (btnmenu1 == HIGH)
+	{
+		heureauto1 = (heureauto1 + 1) % 24;
+	}
+	else if (btnmenu2 == HIGH)
+	{
+		heureauto2 = (heureauto2 + 1) % 24;
+	}
+	else if (btnretour == HIGH)
+	{
+		lcd.clear();
+		menu();
+	}
 }
