@@ -1,27 +1,20 @@
-#include <Time.h> // Synchro tps avec l'ordi
-#include <LiquidCrystal.h> // Lib afficheur liquid
-#include <Servo.h> // Lib servo
+#include <Time.h>
+#include <LiquidCrystal_I2C.h>
+#include <Servo.h>
 #include <Wire.h>
+
+// Branchements
+#define PIN_SERVO 0
+#define PIN_BCHAT 0
+#define PIN_BMENU1 0
+#define PIN_BMENU2 0
+#define PIN_BMENU3 0
 
 //Config
 int distribparjour;
 int maxdistribparjour = 0;
 #define valservo 42 // A chercher
 
-//Port afficheur liquid
-#define portafficheurRS 42 // Need christian
-#define portafficheur2 42  // Need christian
-#define portafficheur3  42 // Need christian
-#define portafficheur4 42  // Need christian
-#define portafficheur5  42 // Need christian
-#define portafficheur6  42 // Need christian
-
-#define bp 42  //Entree christian
-#define servo 42  //Sortie chistian
-
-#define portbtnmenu1 42 // Entree Christian
-#define portbtnmenu2 42 // Entree Christian
-#define portbtnretour 42 // Entree christian
 int btnmenu1;
 int btnmenu2;
 int btnretour;
