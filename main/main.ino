@@ -83,6 +83,7 @@ void loop() { //Boucle principale
 	int btnretour = digitalRead(portbtnretour); //Christian needed
   
 	btnconfig();
+	rsttime();
 
 	int bpactiv = digitalRead(bp);
 
@@ -296,4 +297,12 @@ void displayafterfood() {
 	lcd.print("-");
 	lcd.setCursor(1, 13);
 	lcd.print(decrementpoid);
+}
+
+void rsttime() {
+	if (heure == 23)
+	{
+		distribparjour = 0;
+		afficheurman = 0;
+	}
 }
