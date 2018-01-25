@@ -12,7 +12,7 @@
 #define PIN_BHEURE 0
 
 // Parametres de l'ecran LCD
-#define I2C_ADDR 0x0
+#define LCD_ADDR 0x0
 #define LCD_COLS 16
 #define LCD_LIGS 2
 
@@ -21,6 +21,7 @@ int dose;
 
 // Rations distribuees dans la journee et nombre maximal de rations par jour
 int nbdistrib;
+int nbdemandes;
 int maxdistribparjour;
 
 // Si oui ou non la distribution automatique est activee et heures de la distribution automatique
@@ -34,7 +35,7 @@ int croquettesnow;
 int poidcroquettes;
 int decrementpoid;
 
-int afficheurman;
+int jouract;
 
 Servo servo;
 LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_LIGS);
@@ -66,105 +67,114 @@ void setup()
     delay(2000);
     lcd.clear();
     menu();
-
-    fakepoid = 300;
 }
 
-void loop() { //Boucle principale
+void loop()
+{
+    if(jouract != day())
+    {
+        jouract = day();
+        nbdistrib = 0;
+        nbdemandes = 0;
 
-    int btnmenu1 = digitalRead(PIN_BMENU1); //Christian needed
-    int btnmenu2 = digitalRead(PIN_BMENU2); //Christian needed
-    int btnretour = digitalRead(PIN_BMENU3); //Christian needed
-    int BHEURE = digitalRead(PIN_BHEURE);
-  
-    rsttime();
+        for(int i = 0; i < 24; i++)
+        {
+            distribdonnee[i] = 0;
+        }
+    }
 
-    int bpactiv = digitalRead(bp);
-
+<<<<<<< HEAD
     if (bpactiv == HIGH)
     {
         Serial.println("J'ai faim");
     }
 
     if (heureauto == 1 && distribauto[heure])
+=======
+    if(heureauto && distribauto[hour()] && !distribdonnee[hour()])
+>>>>>>> 616dc855a2f040e6b979210b414c7dba68aff344
     {
-        decrementpoid = random(45, 65);
+        distribdonnee[hour()] = 1;
+        fakepoid -= dose;
 
         manger();
 
         Serial.println("LA BOUFFE");
-
-        heureauto = 0;
-        fakepoid = fakepoid - decrementpoid;
-
-        Serial.println("Var poid : ");
+        Serial.println("Var poids : ");
         Serial.println(fakepoid);
     }
-    else if (bpactiv == 1 && distribparjour <= maxdistribparjour)
+    else if(digitalRead(PIN_BCHAT) == HIGH)
     {
-        decrementpoid = random(45, 65);
+        nbdemandes++;
+        if(nbdistrib < maxdistribparjour)
+        {
+            manger();
 
-        manger();
+            Serial.println("NOURRIS-MOI");
 
-        Serial.println("Triggered distrib manuel");
+            distribparjour++;
+            fakepoid -= decrementpoid;
 
-        distribparjour++;
-        afficheurman++;
-
-        fakepoid = fakepoid - decrementpoid;
-
-        Serial.println("Distribution par jour : ");
-        Serial.println(distribparjour);
-        Serial.println("Variable afficheur nbr de x manuel : ");
-        Serial.println(afficheurman);
-        Serial.println("Var poid : ");
-        Serial.println(fakepoid);
+            Serial.printt("Distributions : ");
+            Serial.println(nbdistrib);
+            Serial.print("Nombre de demandes : ");
+            Serial.println(nbdemandes);
+            Serial.print("Var poid : ");
+            Serial.println(fakepoid);
+        }
+        else
+        {
+            Serial.println("Attention gruge");
+        }
     }
-    else if (BHEURE == HIGH)
+    else if(digitalRead(BHEURE) == HIGH)
     {
         settime();
     }
-
-    croquettesnow = fakepoid;
 }
 
-void manger() { //Fonction de distribution des croquettes
-    turnaround.write(valservo); // On fait tourner le servo moteur
-    delay(50);
+void manger()
+{
+    servo.write(dose);
+    servo.write(0);
 }
 
-void configurator() {
-    if (btnmenu1 == HIGH)
+void configurator()
+{
+    if(btnmenu1 == HIGH)
     {
         lcd.clear();
         reglages();
     }
-    else if (btnmenu2 == HIGH)
+    else if(btnmenu2 == HIGH)
     {
         lcd.clear();
         croquettes();
     }
-    else if (btnretour == HIGH)
+    else if(btnretour == HIGH)
     {
         lcd.clear();
         menu();
     }
 }
 
-void btnconfig() {
+void btnconfig()
+{
     int btnplus = digitalRead(btnmenu1);
-    
-    if (btnplus == HIGH)
+
+    if(btnplus == HIGH)
     {
         addconfig();
     }
 }
 
-void addconfig() {
+void addconfig()
+{
     maxdistribparjour = (maxdistribparjour + 1) % 5;
 }
 
-void menu() {
+void menu()
+{
     lcd.clear();
 
     lcd.setCursor(0, 0);
@@ -181,7 +191,8 @@ void menu() {
     configurator();
 }
 
-void display() { //Fonction de l'afficheur
+void display()
+{
     lcd.setCursor(0, 0);
     lcd.print("X Manuels : ");
     lcd.setCursor(0, 13);
@@ -192,14 +203,15 @@ void display() { //Fonction de l'afficheur
     lcd.setCursor(1, 11);
     lcd.print(maxdistribparjour);
 
-	btnconfig();
+    btnconfig();
 
     delay(4500);
 
     menu();
 }
 
-void croquettes() {
+void croquettes()
+{
     lcd.setCursor(0, 0);
     lcd.print("Crts 0 : ");
     lcd.setCursor(0, 10);
@@ -214,13 +226,15 @@ void croquettes() {
     menu();
 }
 
-void resetservo() {
+void resetservo()
+{
     turnaround.write(0);
 
     Serial.println("Servo reset");
 }
 
-void reglages() {
+void reglages()
+{
     lcd.setCursor(0, 0);
     lcd.print("Heures");
     lcd.setCursor(1, 3);
@@ -230,17 +244,17 @@ void reglages() {
     lcd.setCursor(1, 11);
     lcd.print("2");
 
-    if (btnmenu1 == HIGH)
+    if(btnmenu1 == HIGH)
     {
         lcd.clear();
         rglheures();
     }
-    else if (btnmenu2 == HIGH)
+    else if(btnmenu2 == HIGH)
     {
         lcd.clear();
         display();
     }
-    else if (btnretour == HIGH)
+    else if(btnretour == HIGH)
     {
         lcd.clear();
         menu();
@@ -291,50 +305,50 @@ void indistribcrt() {
 }
 
 void displayafterfood() {
-	lcd.clear();
+    lcd.clear();
 
-	lcd.setCursor(0, 0);
+    lcd.setCursor(0, 0);
 
-	lcd.print("AVANT / APRES");
-	lcd.setCursor(1, 3);
-	lcd.print(croquettesdepart);
-	lcd.setCursor(1, 11);
-	lcd.print("-");
-	lcd.setCursor(1, 13);
-	lcd.print(decrementpoid);
+    lcd.print("AVANT / APRES");
+    lcd.setCursor(1, 3);
+    lcd.print(croquettesdepart);
+    lcd.setCursor(1, 11);
+    lcd.print("-");
+    lcd.setCursor(1, 13);
+    lcd.print(decrementpoid);
 }
 
 void rsttime() {
-	if (heure == 23)
-	{
-		distribparjour = 0;
-		afficheurman = 0;
-	}
+    if (heure == 23)
+    {
+        distribparjour = 0;
+        afficheurman = 0;
+    }
 }
 
 void settime() {
-	lcd.clear();
+    lcd.clear();
 
-	lcd.setCursor(0, 0);
+    lcd.setCursor(0, 0);
 
-	lcd.print("HEURE");
-	lcd.setCursor(0, 7);
-	lcd.print("MIN");
-	lcd.setCursor(1, 4);
-	lcd.print(hour);
-	lcd.setCursor(1, 5);
-	lcd.print(min);
+    lcd.print("HEURE");
+    lcd.setCursor(0, 7);
+    lcd.print("MIN");
+    lcd.setCursor(1, 4);
+    lcd.print(hour);
+    lcd.setCursor(1, 5);
+    lcd.print(min);
 
-	if (btnmenu1 == HIGH)
-	{
-		hour++;
-	}
-	else if (btnmenu2 == HIGH)
-	{
-		min++;
-	}
-	else if (btnretour == HIGH)
-	{
-		menu();
-	}
+    if (btnmenu1 == HIGH)
+    {
+        hour++;
+    }
+    else if (btnmenu2 == HIGH)
+    {
+        min++;
+    }
+    else if (btnretour == HIGH)
+    {
+        menu();
+    }
 }
