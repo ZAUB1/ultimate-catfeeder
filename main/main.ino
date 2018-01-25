@@ -9,6 +9,7 @@
 #define PIN_BMENU1 0
 #define PIN_BMENU2 0
 #define PIN_BMENU3 0
+#define PIN_BHEURE 0
 
 // Parametres de l'ecran LCD
 #define I2C_ADDR 0x0
@@ -71,16 +72,13 @@ void setup()
 
 void loop() { //Boucle principale
 
-    int btnmenu1 = digitalRead(portbtnmenu1); //Christian needed
-    int btnmenu2 = digitalRead(portbtnmenu2); //Christian needed
-    int btnretour = digitalRead(portbtnretour); //Christian needed
+    int btnmenu1 = digitalRead(PIN_BMENU1); //Christian needed
+    int btnmenu2 = digitalRead(PIN_BMENU2); //Christian needed
+    int btnretour = digitalRead(PIN_BMENU3); //Christian needed
+    int BHEURE = digitalRead(PIN_BHEURE);
   
-<<<<<<< HEAD
-	btnconfig();
-	rsttime();
-=======
     btnconfig();
->>>>>>> b95f870b17f6dd00d0e01e5a17785fd2a2ac0513
+    rsttime();
 
     int bpactiv = digitalRead(bp);
 
@@ -117,6 +115,10 @@ void loop() { //Boucle principale
         Serial.println(afficheurman);
         Serial.println("Var poid : ");
         Serial.println(fakepoid);
+    }
+    else if (BHEURE == HIGH)
+    {
+        settime();
     }
 
     croquettesnow = fakepoid;
@@ -301,5 +303,32 @@ void rsttime() {
 	{
 		distribparjour = 0;
 		afficheurman = 0;
+	}
+}
+
+void settime() {
+	lcd.clear();
+
+	lcd.setCursor(0, 0);
+
+	lcd.print("HEURE");
+	lcd.setCursor(0, 7);
+	lcd.print("MIN");
+	lcd.setCursor(1, 4);
+	lcd.print(hour);
+	lcd.setCursor(1, 5);
+	lcd.print(min);
+
+	if (btnmenu1 == HIGH)
+	{
+		hour++;
+	}
+	else if (btnmenu2 == HIGH)
+	{
+		min++;
+	}
+	else if (btnretour == HIGH)
+	{
+		menu();
 	}
 }
