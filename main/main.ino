@@ -27,6 +27,7 @@ int maxdistribparjour;
 // Si oui ou non la distribution automatique est activee et heures de la distribution automatique
 int distribauto;
 int heureauto[24];
+int distribdonnee[24];
 
 // Je mets un commentaire mais je sais pas ce que c'est
 int fakepoid;
@@ -83,16 +84,7 @@ void loop()
         }
     }
 
-<<<<<<< HEAD
-    if (bpactiv == HIGH)
-    {
-        Serial.println("J'ai faim");
-    }
-
-    if (heureauto == 1 && distribauto[heure])
-=======
-    if(heureauto && distribauto[hour()] && !distribdonnee[hour()])
->>>>>>> 616dc855a2f040e6b979210b414c7dba68aff344
+    if(distribauto && heureauto[hour()] && !distribdonnee[hour()])
     {
         distribdonnee[hour()] = 1;
         fakepoid -= dose;
@@ -112,10 +104,10 @@ void loop()
 
             Serial.println("NOURRIS-MOI");
 
-            distribparjour++;
+            nbdistrib++;
             fakepoid -= decrementpoid;
 
-            Serial.printt("Distributions : ");
+            Serial.print("Distributions : ");
             Serial.println(nbdistrib);
             Serial.print("Nombre de demandes : ");
             Serial.println(nbdemandes);
@@ -127,7 +119,7 @@ void loop()
             Serial.println("Attention gruge");
         }
     }
-    else if(digitalRead(BHEURE) == HIGH)
+    else if(digitalRead(PIN_BHEURE) == HIGH)
     {
         settime();
     }
@@ -141,17 +133,17 @@ void manger()
 
 void configurator()
 {
-    if(btnmenu1 == HIGH)
+    if(digitalRead(PIN_BMENU1) == HIGH)
     {
         lcd.clear();
         reglages();
     }
-    else if(btnmenu2 == HIGH)
+    else if(digitalRead(PIN_BMENU2) == HIGH)
     {
         lcd.clear();
         croquettes();
     }
-    else if(btnretour == HIGH)
+    else if(digitalRead(PIN_BMENU3) == HIGH)
     {
         lcd.clear();
         menu();
@@ -160,7 +152,7 @@ void configurator()
 
 void btnconfig()
 {
-    int btnplus = digitalRead(btnmenu1);
+    int btnplus = digitalRead(digitalRead(PIN_BMENU1));
 
     if(btnplus == HIGH)
     {
@@ -196,7 +188,7 @@ void display()
     lcd.setCursor(0, 0);
     lcd.print("X Manuels : ");
     lcd.setCursor(0, 13);
-    lcd.print(afficheurman);
+    lcd.print(nbdemandes);
 
     lcd.setCursor(1, 0);
     lcd.print("Maximum : ");
@@ -226,13 +218,6 @@ void croquettes()
     menu();
 }
 
-void resetservo()
-{
-    turnaround.write(0);
-
-    Serial.println("Servo reset");
-}
-
 void reglages()
 {
     lcd.setCursor(0, 0);
@@ -244,29 +229,30 @@ void reglages()
     lcd.setCursor(1, 11);
     lcd.print("2");
 
-    if(btnmenu1 == HIGH)
+    if(digitalRead(PIN_BMENU1) == HIGH)
     {
         lcd.clear();
         rglheures();
     }
-    else if(btnmenu2 == HIGH)
+    else if(digitalRead(PIN_BMENU2) == HIGH)
     {
         lcd.clear();
         display();
     }
-    else if(btnretour == HIGH)
+    else if(digitalRead(PIN_BMENU3) == HIGH)
     {
         lcd.clear();
         menu();
     }
 }
 
-void rglheures() {
+void rglheures()
+{
     lcd.clear();
 
     lcd.setCursor(0, 0);
-
-    lcd.print("1 : ");
+#warning FIXME
+    /*lcd.print("1 : ");
     lcd.setCursor(0, 5);
     lcd.print(heureauto1);
     lcd.setCursor(1, 0);
@@ -274,29 +260,30 @@ void rglheures() {
     lcd.setCursor(1, 5);
     lcd.print(heureauto2);
 
-    if (btnmenu1 == HIGH)
+    if(digitalRead(PIN_BMENU1) == HIGH)
     {
         heureauto1 = (heureauto1 + 1) % 24;
     }
-    else if (btnmenu2 == HIGH)
+    else if(digitalRead(PIN_BMENU2) == HIGH)
     {
         heureauto2 = (heureauto2 + 1) % 24;
     }
-    else if (btnretour == HIGH)
+    else if(digitalRead(PIN_BMENU3) == HIGH)
     {
         lcd.clear();
         menu();
-    }
+    }*/
 }
 
-void indistribcrt() {
+void indistribcrt()
+{
     lcd.clear();
 
     lcd.setCursor(0, 0);
 
     lcd.print("LARGUAGE EN COUR");
 
-    for (i = 5; i <= 10; i = i++)
+    for(int i = 5; i <= 10; i = i++)
     {
         lcd.setCursor(1, i);
         lcd.print(".");
@@ -304,7 +291,8 @@ void indistribcrt() {
     }
 }
 
-void displayafterfood() {
+void displayafterfood()
+{
     lcd.clear();
 
     lcd.setCursor(0, 0);
@@ -318,15 +306,8 @@ void displayafterfood() {
     lcd.print(decrementpoid);
 }
 
-void rsttime() {
-    if (heure == 23)
-    {
-        distribparjour = 0;
-        afficheurman = 0;
-    }
-}
-
-void settime() {
+void settime()
+{
     lcd.clear();
 
     lcd.setCursor(0, 0);
@@ -335,20 +316,21 @@ void settime() {
     lcd.setCursor(0, 7);
     lcd.print("MIN");
     lcd.setCursor(1, 4);
-    lcd.print(hour);
+#warning zaub1 help
+/*    lcd.print(hour);
     lcd.setCursor(1, 5);
     lcd.print(min);
 
-    if (btnmenu1 == HIGH)
+    if(digitalRead(PIN_BMENU1) == HIGH)
     {
         hour++;
     }
-    else if (btnmenu2 == HIGH)
+    else if(digitalRead(PIN_BMENU2) == HIGH)
     {
         min++;
     }
-    else if (btnretour == HIGH)
+    else if(digitalRead(PIN_BMENU3) == HIGH)
     {
         menu();
-    }
+    }*/
 }
