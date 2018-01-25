@@ -23,11 +23,15 @@ int maxdistribparjour = 0;
 #define portbtnmenu1 42 // Entree Christian
 #define portbtnmenu2 42 // Entree Christian
 #define portbtnretour 42 // Entree christian
+int btnmenu1;
+int btnmenu2;
+int btnretour;
 
 int fakepoid;
 int croquettesnow;
 #define croquettesdepart 300
 int poidcroquettes;
+int decrementpoid;
 
 int afficheurman;
 
@@ -80,10 +84,11 @@ void loop() { //Boucle principale
 	btnconfig();
 
 	int bpactiv = digitalRead(bp);
-    int decrementpoid = random(45, 65);
 
-	if (heureauto && distribauto[heure])
+	if (heureauto == 1 && distribauto[heure])
 	{
+		int decrementpoid = random(45, 65);
+
 		manger();
 
 		Serial.println("LA BOUFFE");
@@ -96,6 +101,8 @@ void loop() { //Boucle principale
 	}
 	else if (bpactiv == 1 && distribparjour <= maxdistribparjour)
 	{
+		int decrementpoid = random(45, 65);
+
         manger();
 
 		Serial.println("Triggered distrib manuel");
@@ -215,8 +222,6 @@ void resetservo() {
 }
 
 void reglages() {
-    lcd.clear();
-    
     lcd.setCursor(0, 0);
     lcd.print("Heures");
     lcd.setCursor(1, 3);
@@ -244,6 +249,8 @@ void reglages() {
 }
 
 void rglheures() {
+	lcd.clear();
+
 	lcd.setCursor(0, 0);
 
 	lcd.print("1 : ");
@@ -267,4 +274,43 @@ void rglheures() {
 		lcd.clear();
 		menu();
 	}
+}
+
+void indistribcrt() {
+	lcd.clear();
+
+	lcd.setCursor(0, 0);
+
+	lcd.print("LARGUAGE EN COUR");
+	lcd.setCursor(1, 5);
+	lcd.print(".");
+	delay(50);
+	lcd.setCursor(1, 6);
+	lcd.print(".");
+	delay(50);
+	lcd.setCursor(1, 7);
+	lcd.print(".");
+	delay(50);
+	lcd.setCursor(1, 8);
+	lcd.print(".");
+	delay(50);
+	lcd.setCursor(1, 9);
+	lcd.print(".");
+	delay(50);
+	lcd.setCursor(1, 10);
+	lcd.print(".");
+}
+
+void displayafterfood() {
+	lcd.clear();
+
+	lcd.setCursor(0, 0);
+
+	lcd.print("AVANT / APRES");
+	lcd.setCursor(1, 3);
+	lcd.print(croquettesdepart);
+	lcd.setCursor(1, 11);
+	lcd.print("-");
+	lcd.setCursor(1, 13);
+	lcd.print(decrementpoid);
 }
