@@ -17,7 +17,6 @@ int maxdistribparjour = 0;
 #define portafficheur6  42 // Need christian
 
 #define bp 42  //Entree christian
-#define btnreglage  42 // Entree chistian
 #define servo 42  //Sortie chistian
 
 #define portbtnmenu1 42 // Entree Christian
@@ -42,6 +41,8 @@ int heureauto1;
 int heureauto2;
 
 int heure = hour(); // FIXEME
+
+int i;
 
 Servo turnaround;
 LiquidCrystal lcd(portafficheurRS, portafficheur2, portafficheur3, portafficheur4, portafficheur5, portafficheur6);
@@ -156,15 +157,7 @@ void btnconfig() {
 }
 
 void addconfig() {
-	for (maxdistribparjour = 1; maxdistribparjour <= 5; maxdistribparjour++)
-	{
-		Serial.println(maxdistribparjour);
-
-		delay(50);
-
-		lcd.noDisplay();
-		lcd.display();
-	}
+	maxdistribparjour = (maxdistribparjour + 1) % 5;
 }
 
 void menu() {
@@ -282,23 +275,13 @@ void indistribcrt() {
 	lcd.setCursor(0, 0);
 
 	lcd.print("LARGUAGE EN COUR");
-	lcd.setCursor(1, 5);
-	lcd.print(".");
-	delay(100);
-	lcd.setCursor(1, 6);
-	lcd.print(".");
-	delay(100);
-	lcd.setCursor(1, 7);
-	lcd.print(".");
-	delay(100);
-	lcd.setCursor(1, 8);
-	lcd.print(".");
-	delay(100);
-	lcd.setCursor(1, 9);
-	lcd.print(".");
-	delay(100);
-	lcd.setCursor(1, 10);
-	lcd.print(".");
+
+	for (i = 5; i <= 10; i = i++)
+	{
+		lcd.setCursor(1, i);
+		lcd.print(".");
+		delay(100);
+	}
 }
 
 void displayafterfood() {
