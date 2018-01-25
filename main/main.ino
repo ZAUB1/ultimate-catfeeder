@@ -81,6 +81,11 @@ void loop() { //Boucle principale
 
     int bpactiv = digitalRead(bp);
 
+    if (bpactiv == HIGH)
+    {
+        Serial.println("J'ai faim");
+    }
+
     if (heureauto == 1 && distribauto[heure])
     {
         decrementpoid = random(45, 65);
