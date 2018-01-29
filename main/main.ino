@@ -1,20 +1,24 @@
-#include <LiquidCrystal_I2C.h>
 #include <Servo.h>
+#include "rgb_lcd.h"
+#include <TimeLib.h>
 #include <Time.h>
 #include <Wire.h>
 
 // Branchements
-#define PIN_SERVO 0
-#define PIN_BCHAT 0
-#define PIN_BMENU1 0
-#define PIN_BMENU2 0
-#define PIN_BMENU3 0
-#define PIN_BHEURE 0
+#define PIN_SERVO 7
+#define PIN_BCHAT 2
+#define PIN_BMENU1 3
+#define PIN_BMENU2 4
+#define PIN_BMENU3 5
+#define PIN_BHEURE 6
 
 // Parametres de l'ecran LCD
-#define LCD_ADDR 0x0
+#define LCD_ADDR 0x27
 #define LCD_COLS 16
 #define LCD_LIGS 2
+#define r 255
+#define g 32
+#define b 192
 
 // Quantite distribuee par ration
 int dose;
@@ -26,8 +30,8 @@ int maxdistribparjour;
 
 // Si oui ou non la distribution automatique est activee et heures de la distribution automatique
 int distribauto;
-int heureauto[24];
-int distribdonnee[24];
+int heureauto1, heureauto2;
+int donneeauto;
 
 // Je mets un commentaire mais je sais pas ce que c'est
 int fakepoid;
@@ -39,7 +43,7 @@ int decrementpoid;
 int jouract;
 
 Servo servo;
-LiquidCrystal_I2C lcd(LCD_ADDR, LCD_COLS, LCD_LIGS);
+rgb_lcd lcd;
 
 void setup()
 {
@@ -49,8 +53,8 @@ void setup()
     dose = 50;
     maxdistribparjour = 5;
     distribauto = 0;
-    heureauto[9] = 1;
-    heureauto[19] = 1;
+    heureauto1 = 9;
+    heureauto2 = 19;
 
     // Definition des branchements
     pinMode(PIN_BCHAT, INPUT);
@@ -60,8 +64,9 @@ void setup()
     servo.attach(PIN_SERVO);
 
     // Message sur l'ecran LCD
-    lcd.init();
+    lcd.begin(2, 16);
     lcd.setCursor(0, 0);
+    lcd.setRGB(r, g, b);
     lcd.print("THE CAT FEEDER");
     Serial.println("THE CAT FEEDER");
 
@@ -77,16 +82,12 @@ void loop()
         jouract = day();
         nbdistrib = 0;
         nbdemandes = 0;
-
-        for(int i = 0; i < 24; i++)
-        {
-            distribdonnee[i] = 0;
-        }
+        donneeauto = 0;
     }
 
-    if(distribauto && heureauto[hour()] && !distribdonnee[hour()])
+    if(distribauto && (heureauto1 == hour() || heureauto2 == hour()) && donneeauto < 2)
     {
-        distribdonnee[hour()] = 1;
+        donneeauto++;
         fakepoid -= dose;
 
         manger();
@@ -252,7 +253,7 @@ void rglheures()
 
     lcd.setCursor(0, 0);
 #warning FIXME
-    /*lcd.print("1 : ");
+    lcd.print("1 : ");
     lcd.setCursor(0, 5);
     lcd.print(heureauto1);
     lcd.setCursor(1, 0);
@@ -272,7 +273,7 @@ void rglheures()
     {
         lcd.clear();
         menu();
-    }*/
+    }
 }
 
 void indistribcrt()
@@ -316,21 +317,25 @@ void settime()
     lcd.setCursor(0, 7);
     lcd.print("MIN");
     lcd.setCursor(1, 4);
-#warning zaub1 help
-/*    lcd.print(hour);
+
+    int H = hour(), M = minute();
+
+    lcd.print(H);
     lcd.setCursor(1, 5);
-    lcd.print(min);
+    lcd.print(M);
 
     if(digitalRead(PIN_BMENU1) == HIGH)
     {
-        hour++;
+        H = (H + 1) % 24;
+        setTime(H, M, second(), day(), month(), year());
     }
     else if(digitalRead(PIN_BMENU2) == HIGH)
     {
-        min++;
+        M = (M + 1) % 60;
+        setTime(H, M, second(), day(), month(), year());
     }
     else if(digitalRead(PIN_BMENU3) == HIGH)
     {
         menu();
-    }*/
+    }
 }
