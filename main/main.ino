@@ -64,7 +64,7 @@ void setup()
     servo.attach(PIN_SERVO);
 
     // Message sur l'ecran LCD
-    lcd.begin(2, 16);
+    lcd.begin(16, 2);
     lcd.setCursor(0, 0);
     lcd.setRGB(r, g, b);
     lcd.print("THE CAT FEEDER");
@@ -172,13 +172,13 @@ void menu()
 
     lcd.setCursor(0, 0);
     lcd.print("Menu : ");
-    lcd.setCursor(0, 8);
+    lcd.setCursor(8, 0);
     lcd.print("*Rgl ");
-    lcd.setCursor(1, 11);
+    lcd.setCursor(11, 1);
     lcd.print("1");
-    lcd.setCursor(0, 14);
+    lcd.setCursor(14, 0);
     lcd.print("*Crt");
-    lcd.setCursor(1, 16);
+    lcd.setCursor(16, 1);
     lcd.print("2");
 
     configurator();
@@ -188,12 +188,12 @@ void display()
 {
     lcd.setCursor(0, 0);
     lcd.print("X Manuels : ");
-    lcd.setCursor(0, 13);
+    lcd.setCursor(13, 0);
     lcd.print(nbdemandes);
 
-    lcd.setCursor(1, 0);
+    lcd.setCursor(0, 1);
     lcd.print("Maximum : ");
-    lcd.setCursor(1, 11);
+    lcd.setCursor(11, 1);
     lcd.print(maxdistribparjour);
 
     btnconfig();
@@ -207,11 +207,11 @@ void croquettes()
 {
     lcd.setCursor(0, 0);
     lcd.print("Crts 0 : ");
-    lcd.setCursor(0, 10);
+    lcd.setCursor(10, 0);
     lcd.print(croquettesdepart);
-    lcd.setCursor(1, 0);
+    lcd.setCursor(0, 1);
     lcd.print("Crts 1 : ");
-    lcd.setCursor(1, 10);
+    lcd.setCursor(10, 1);
     lcd.print(croquettesnow);
 
     delay(4500);
@@ -223,11 +223,11 @@ void reglages()
 {
     lcd.setCursor(0, 0);
     lcd.print("Heures");
-    lcd.setCursor(1, 3);
+    lcd.setCursor(3, 1);
     lcd.print("1");
-    lcd.setCursor(0, 8);
+    lcd.setCursor(8, 0);
     lcd.print("Manuel");
-    lcd.setCursor(1, 11);
+    lcd.setCursor(11, 1);
     lcd.print("2");
 
     if(digitalRead(PIN_BMENU1) == HIGH)
@@ -254,11 +254,11 @@ void rglheures()
     lcd.setCursor(0, 0);
 #warning FIXME
     lcd.print("1 : ");
-    lcd.setCursor(0, 5);
+    lcd.setCursor(5, 0);
     lcd.print(heureauto1);
-    lcd.setCursor(1, 0);
+    lcd.setCursor(0, 1);
     lcd.print("2 : ");
-    lcd.setCursor(1, 5);
+    lcd.setCursor(5, 1);
     lcd.print(heureauto2);
 
     if(digitalRead(PIN_BMENU1) == HIGH)
@@ -286,7 +286,7 @@ void indistribcrt()
 
     for(int i = 5; i <= 10; i = i++)
     {
-        lcd.setCursor(1, i);
+        lcd.setCursor(i, 1);
         lcd.print(".");
         delay(100);
     }
@@ -299,11 +299,11 @@ void displayafterfood()
     lcd.setCursor(0, 0);
 
     lcd.print("AVANT / APRES");
-    lcd.setCursor(1, 3);
+    lcd.setCursor(3, 1);
     lcd.print(croquettesdepart);
-    lcd.setCursor(1, 11);
+    lcd.setCursor(11, 1);
     lcd.print("-");
-    lcd.setCursor(1, 13);
+    lcd.setCursor(13, 1);
     lcd.print(decrementpoid);
 }
 
@@ -314,14 +314,14 @@ void settime()
     lcd.setCursor(0, 0);
 
     lcd.print("HEURE");
-    lcd.setCursor(0, 7);
+    lcd.setCursor(7, 0);
     lcd.print("MIN");
-    lcd.setCursor(1, 4);
+    lcd.setCursor(4, 1);
 
     int H = hour(), M = minute();
 
     lcd.print(H);
-    lcd.setCursor(1, 5);
+    lcd.setCursor(5, 1);
     lcd.print(M);
 
     if(digitalRead(PIN_BMENU1) == HIGH)
