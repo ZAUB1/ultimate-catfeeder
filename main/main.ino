@@ -5,7 +5,7 @@
 #include <Wire.h>
 
 // Branchements
-#define PIN_SERVO 7
+#define PIN_SERVO 12
 #define PIN_BCHAT 2
 #define PIN_BMENU1 3
 #define PIN_BMENU2 4
@@ -66,7 +66,7 @@ void setup()
     pinMode(PIN_BMENU3, INPUT);
     servo.attach(PIN_SERVO);
 	
-	digitalWrite(B5V, 1);
+	
 
     // Message sur l'ecran LCD
     lcd.begin(16, 2);
@@ -74,7 +74,7 @@ void setup()
     lcd.setCursor(1, 0);
     lcd.print("THE CAT FEEDER");
     Serial.println("THE CAT FEEDER");
-	#warning Christian arrete de jouer
+	//#warning Christian arrete de jouer
 
     for(int i = 2; i <= 13; i++)
     {
@@ -89,9 +89,10 @@ void setup()
     menu();
 }
 
-#define P 1000
+#define P 2000
 void loop()
 {
+  digitalWrite(B5V, 1);
   if(random(0, P) == 1)
   {
     for(int t = random(5,250); r != t; r < t ? r++ : r--)
@@ -117,7 +118,7 @@ void loop()
         donneeauto = 0;
     }
 
-    if(distribauto && (heureauto1 == hour() || heureauto2 == hour()) && donneeauto < 2)
+    if((heureauto1 == hour() || heureauto2 == hour()) && donneeauto < 2)
     {
         donneeauto++;
         fakepoid -= dose;
@@ -161,7 +162,7 @@ void manger()
     servo.write(dose);
     delay(BOUFFE);
     servo.write(0);
-    indistribcrt()
+    indistribcrt();
 }
 
 void configurator()
@@ -345,12 +346,14 @@ void indistribcrt()
 
     lcd.print("LARGUAGE EN COUR");
 
-    for(int i = 5; i <= 10; i = i++)
+    for(int i = 5; i <= 10; i++)
     {
         lcd.setCursor(i, 1);
         lcd.print(".");
-        delay(100);
+        delay(200);
     }
+    
+    lcd.clear();
 }
 
 void displayafterfood()
