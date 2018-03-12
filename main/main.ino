@@ -16,9 +16,9 @@
 #define LCD_ADDR 0x27
 #define LCD_COLS 16
 #define LCD_LIGS 2
-int r =255;
-int g= 32;
-int b =192;
+int r = 255;
+int g = 32;
+int b = 192;
 #define DD 500
 #define BOUFFE 1000
 
@@ -35,7 +35,6 @@ int distribauto;
 int heureauto1, heureauto2;
 int donneeauto;
 
-// Je mets un commentaire mais je sais pas ce que c'est
 int fakepoid;
 int croquettesnow;
 #define croquettesdepart 300
@@ -43,6 +42,8 @@ int poidcroquettes;
 int decrementpoid;
 
 int jouract;
+
+#define B5V 7
 
 Servo servo;
 rgb_lcd lcd;
@@ -64,6 +65,8 @@ void setup()
     pinMode(PIN_BMENU2, INPUT);
     pinMode(PIN_BMENU3, INPUT);
     servo.attach(PIN_SERVO);
+	
+	digitalWrite(B5V, 1);
 
     // Message sur l'ecran LCD
     lcd.begin(16, 2);
@@ -71,6 +74,7 @@ void setup()
     lcd.setCursor(1, 0);
     lcd.print("THE CAT FEEDER");
     Serial.println("THE CAT FEEDER");
+	#warning Christian arrete de jouer
 
     for(int i = 2; i <= 13; i++)
     {
