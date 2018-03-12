@@ -118,7 +118,7 @@ void loop()
         donneeauto = 0;
     }
 
-    if((heureauto1 == hour() || heureauto2 == hour()) && donneeauto < 2)
+    if((heureauto1 == hour() && donneauto == 0) || (heureauto2 == hour() && donneauto == 1))
     {
         donneeauto++;
         fakepoid -= dose;
