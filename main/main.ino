@@ -74,7 +74,6 @@ void setup()
     lcd.setCursor(1, 0);
     lcd.print("THE CAT FEEDER");
     Serial.println("THE CAT FEEDER");
-	//#warning Christian arrete de jouer
 
     for(int i = 2; i <= 13; i++)
     {
